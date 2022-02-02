@@ -9,6 +9,7 @@ import {
   FetchStaticData,
   MediaFetchAgent,
   NetworkIDs,
+  Networks,
 } from "@zoralabs/nft-hooks";
 
 export default function Home({ tokens }: { tokens: any }) {
@@ -22,9 +23,10 @@ export default function Home({ tokens }: { tokens: any }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fetchAgent = new MediaFetchAgent(
-    NETWORK_ID as NetworkIDs
-  );
+  const fetchAgent = new MediaFetchAgent(Networks.RINKEBY);
+
+  console.info(await fetchAgent.loadNFTData('0xD9E08ae6Abc04Ba379cC23F3949C69EEf226A5cf', '0'))
+
   const contractAddress = CONTRACT_ADDRESSES as string;
   const tokens = await FetchStaticData.fetchZoraIndexerList(fetchAgent, {
     curatorAddress: CURATOR_ID as any,
@@ -32,6 +34,8 @@ export const getStaticProps: GetStaticProps = async () => {
     limit: 100,
     offset: 0,
   });
+
+  console.info('Hit', tokens)
 
   return {
     props: {
